@@ -7,7 +7,7 @@ import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
 import { MonthlyOverviewChart } from '@/components/dashboard/MonthlyOverviewChart';
 import { ExpensePieChart } from '@/components/analytics/ExpensePieChart';
 import { Button } from '@/components/ui/Button';
-import { PlusCircle, TrendingUp, Sparkles } from 'lucide-react';
+import { PlusCircle, Sparkles } from 'lucide-react';
 
 export default function DashboardPage() {
   const {

@@ -22,7 +22,6 @@ export default function TransactionsPage() {
 
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
 
-  // Calculate overall transaction totals
   const totalIncome = transactions
     .filter((t) => t.category?.type === 'income')
     .reduce((acc, t) => acc + Number(t.amount || 0), 0);

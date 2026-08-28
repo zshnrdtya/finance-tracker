@@ -36,27 +36,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = [
     {
       label: 'Dashboard',
-      href: '/',
+      href: '/dashboard',
       icon: LayoutDashboard,
-      active: pathname === '/',
+      active: pathname === '/dashboard',
     },
     {
       label: 'Transactions',
-      href: '/transactions',
+      href: '/dashboard/transactions',
       icon: ReceiptText,
-      active: pathname.startsWith('/transactions'),
+      active: pathname.startsWith('/dashboard/transactions'),
     },
     {
       label: 'Analytics & Reports',
-      href: '/analytics',
+      href: '/dashboard/analytics',
       icon: PieChart,
-      active: pathname.startsWith('/analytics'),
+      active: pathname.startsWith('/dashboard/analytics'),
     },
     {
       label: 'Categories',
-      href: '/categories',
+      href: '/dashboard/categories',
       icon: FolderKanban,
-      active: pathname.startsWith('/categories'),
+      active: pathname.startsWith('/dashboard/categories'),
     },
   ];
 

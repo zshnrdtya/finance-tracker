@@ -30,7 +30,7 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({
           <p className="text-xs text-gray-500 mt-0.5">Your last 5 recorded financial activities</p>
         </div>
         <Link
-          href="/transactions"
+          href="/dashboard/transactions"
           className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-all"
         >
           <span>View All</span>

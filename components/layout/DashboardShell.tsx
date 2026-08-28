@@ -26,25 +26,25 @@ export const DashboardShell: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Determine dynamic title and subtitle based on current route
   const getPageInfo = () => {
-    if (pathname === '/') {
+    if (pathname === '/dashboard' || pathname === '/') {
       return {
         title: 'Financial Overview',
         subtitle: 'Track your personal and family income, spending, and savings',
       };
     }
-    if (pathname.startsWith('/transactions')) {
+    if (pathname.includes('/transactions')) {
       return {
         title: 'Transactions History',
         subtitle: 'View, search, and manage all your income and expense records',
       };
     }
-    if (pathname.startsWith('/analytics')) {
+    if (pathname.includes('/analytics')) {
       return {
         title: 'Reports & Analytics',
         subtitle: 'Visual category breakdown and multi-month financial insights',
       };
     }
-    if (pathname.startsWith('/categories')) {
+    if (pathname.includes('/categories')) {
       return {
         title: 'Categories & Settings',
         subtitle: 'Organize your income and expense categorization schema',

@@ -39,15 +39,18 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
   const isAuthRoute =
-    request.nextUrl.pathname.startsWith('/login') ||
-    request.nextUrl.pathname.startsWith('/register');
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/register');
 
   const isProtectedRoute =
-    request.nextUrl.pathname === '/' ||
-    request.nextUrl.pathname.startsWith('/transactions') ||
-    request.nextUrl.pathname.startsWith('/analytics') ||
-    request.nextUrl.pathname.startsWith('/categories');
+    pathname === '/' ||
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/transactions') ||
+    pathname.startsWith('/analytics') ||
+    pathname.startsWith('/categories');
 
   // If user is not signed in and trying to access a protected route, redirect to /login
   if (!user && isProtectedRoute) {
@@ -56,10 +59,17 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // If user is signed in and trying to access login/register, redirect to dashboard /
+  // If user is signed in and trying to access root (/), redirect to /dashboard
+  if (user && pathname === '/') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/dashboard';
+    return NextResponse.redirect(url);
+  }
+
+  // If user is signed in and trying to access login/register, redirect to /dashboard
   if (user && isAuthRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = '/';
+    url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 

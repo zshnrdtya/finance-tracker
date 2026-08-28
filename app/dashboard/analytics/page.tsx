@@ -6,16 +6,14 @@ import { ExpensePieChart } from '@/components/analytics/ExpensePieChart';
 import { IncomeExpenseBarChart } from '@/components/analytics/IncomeExpenseBarChart';
 import { CategoryBreakdownTable } from '@/components/analytics/CategoryBreakdownTable';
 import { calculateMonthlyComparison } from '@/lib/utils';
-import { PieChart, BarChart3, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 
 export default function AnalyticsPage() {
-  const { transactions, categories, expenseBreakdown, incomeBreakdown } = useFinance();
+  const { transactions, expenseBreakdown, incomeBreakdown } = useFinance();
   const [breakdownType, setBreakdownType] = useState<'expense' | 'income'>('expense');
   const [trendMonthCount, setTrendMonthCount] = useState<number>(6);
 
-  // Recalculate dynamic monthly comparison according to selected range
   const dynamicMonthlyData = calculateMonthlyComparison(transactions, trendMonthCount);
-
   const currentBreakdown = breakdownType === 'expense' ? expenseBreakdown : incomeBreakdown;
 
   return (

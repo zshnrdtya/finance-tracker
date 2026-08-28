@@ -5,7 +5,6 @@ import { useFinance } from '@/lib/context/FinanceContext';
 import { CategoryList } from '@/components/categories/CategoryList';
 import { CategoryFormModal } from '@/components/categories/CategoryFormModal';
 import { Category, TransactionType } from '@/lib/types';
-import { FolderKanban } from 'lucide-react';
 
 export default function CategoriesPage() {
   const {
