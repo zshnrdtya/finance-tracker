@@ -14,7 +14,12 @@ export const metadata: Metadata = {
   description:
     'Aplikasi web pelacak keuangan pribadi dan keluarga modern untuk mencatat pemasukan, pengeluaran, dan visualisasi laporan keuangan.',
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/asset/logo zz.png', type: 'image/png' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/asset/logo zz.png',
+    apple: '/asset/logo zz.png',
   },
 };
 
