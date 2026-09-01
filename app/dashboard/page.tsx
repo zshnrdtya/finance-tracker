@@ -64,10 +64,11 @@ export default function DashboardPage() {
 
       {/* Main Charts & Activity Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left / Top: Monthly Cash Flow Bar Chart */}
+        {/* Left / Top: Cash Flow Bar Chart with Daily / Monthly view */}
         <div className="lg:col-span-7 space-y-6">
           <MonthlyOverviewChart
             data={monthlyChartData}
+            transactions={transactions}
             onOpenAddModal={openAddTransaction}
           />
 

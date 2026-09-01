@@ -254,3 +254,65 @@ export function calculateMonthlyComparison(
 
   return months;
 }
+
+export interface CashFlowDataPoint {
+  label: string;
+  fullDate?: string;
+  income: number;
+  expense: number;
+  net: number;
+}
+
+/**
+ * Groups transactions into daily buckets for daily / date-by-date Bar Chart comparison
+ */
+export function calculateDailyComparison(
+  transactions: Transaction[],
+  daysCount: number = 7
+): CashFlowDataPoint[] {
+  const now = new Date();
+  const days: (CashFlowDataPoint & { _key: string })[] = [];
+
+  for (let i = daysCount - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+    const dayLabel = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+    const fullDate = d.toLocaleDateString('id-ID', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+    days.push({
+      label: dayLabel,
+      fullDate,
+      income: 0,
+      expense: 0,
+      net: 0,
+      _key: dateKey,
+    });
+  }
+
+  for (const t of transactions) {
+    if (!t.date) continue;
+    const tDate = new Date(t.date);
+    if (isNaN(tDate.getTime())) continue;
+
+    const amount = Number(t.amount) || 0;
+    const isIncome = t.category?.type === 'income';
+    const tKey = `${tDate.getFullYear()}-${String(tDate.getMonth() + 1).padStart(2, '0')}-${String(tDate.getDate()).padStart(2, '0')}`;
+
+    const matchDay = days.find((d) => d._key === tKey);
+    if (matchDay) {
+      if (isIncome) {
+        matchDay.income += amount;
+      } else {
+        matchDay.expense += amount;
+      }
+      matchDay.net = matchDay.income - matchDay.expense;
+    }
+  }
+
+  return days.map(({ _key, ...rest }) => rest);
+}

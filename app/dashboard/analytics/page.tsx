@@ -1,19 +1,29 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useFinance } from '@/lib/context/FinanceContext';
 import { ExpensePieChart } from '@/components/analytics/ExpensePieChart';
-import { IncomeExpenseBarChart } from '@/components/analytics/IncomeExpenseBarChart';
+import { IncomeExpenseBarChart, AnalyticsPeriod } from '@/components/analytics/IncomeExpenseBarChart';
 import { CategoryBreakdownTable } from '@/components/analytics/CategoryBreakdownTable';
-import { calculateMonthlyComparison } from '@/lib/utils';
+import { calculateMonthlyComparison, calculateDailyComparison } from '@/lib/utils';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 
 export default function AnalyticsPage() {
   const { transactions, expenseBreakdown, incomeBreakdown } = useFinance();
   const [breakdownType, setBreakdownType] = useState<'expense' | 'income'>('expense');
-  const [trendMonthCount, setTrendMonthCount] = useState<number>(6);
+  const [period, setPeriod] = useState<AnalyticsPeriod>('30d');
 
-  const dynamicMonthlyData = calculateMonthlyComparison(transactions, trendMonthCount);
+  const chartData = useMemo(() => {
+    if (period === '7d') {
+      return calculateDailyComparison(transactions, 7);
+    }
+    if (period === '30d') {
+      return calculateDailyComparison(transactions, 30);
+    }
+    const monthCount = period === '3m' ? 3 : period === '6m' ? 6 : 12;
+    return calculateMonthlyComparison(transactions, monthCount);
+  }, [transactions, period]);
+
   const currentBreakdown = breakdownType === 'expense' ? expenseBreakdown : incomeBreakdown;
 
   return (
@@ -24,15 +34,15 @@ export default function AnalyticsPage() {
           Laporan & Analitik Keuangan
         </h2>
         <p className="text-xs text-gray-500 mt-1">
-          Rincian visual kebiasaan pengeluaran, sumber pemasukan, dan tren bulanan.
+          Rincian visual kebiasaan pengeluaran, sumber pemasukan, dan grafik tren harian serta bulanan.
         </p>
       </div>
 
-      {/* 1. Comparative Multi-Month Bar Chart */}
+      {/* 1. Comparative Cash Flow Bar Chart (Daily / Monthly) */}
       <IncomeExpenseBarChart
-        data={dynamicMonthlyData}
-        monthCount={trendMonthCount}
-        onMonthCountChange={(count) => setTrendMonthCount(count)}
+        data={chartData}
+        period={period}
+        onPeriodChange={(newPeriod) => setPeriod(newPeriod)}
       />
 
       {/* 2. Category Breakdown Section with Toggle */}
