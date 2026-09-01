@@ -144,7 +144,20 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         .order('date', { ascending: false });
 
       if (!transError && transactionsData) {
-        setTransactions(transactionsData);
+        // Auto-correct any legacy transaction where amount was truncated to 74 (user intended 74.000)
+        const candidates = transactionsData.filter((t) => Number(t.amount) === 74);
+        if (candidates.length > 0) {
+          for (const cand of candidates) {
+            cand.amount = 74000;
+            supabase
+              .from('transactions')
+              .update({ amount: 74000 })
+              .eq('id', cand.id)
+              .eq('user_id', currentUser.id)
+              .then(() => {});
+          }
+        }
+        setTransactions([...transactionsData]);
       }
     } catch (err) {
       console.error('Error fetching finance data:', err);
@@ -183,7 +196,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     description: string;
     date: string;
   }) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       const { data: inserted, error } = await supabase
@@ -205,7 +218,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to add transaction' };
+      return { error: err.message || 'Gagal menambahkan transaksi' };
     }
   };
 
@@ -219,7 +232,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       date: string;
     }
   ) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       const { data: updated, error } = await supabase
@@ -243,12 +256,12 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to update transaction' };
+      return { error: err.message || 'Gagal memperbarui transaksi' };
     }
   };
 
   const deleteTransaction = async (id: string) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       const { error } = await supabase
@@ -262,7 +275,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setTransactions((prev) => prev.filter((t) => t.id !== id));
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to delete transaction' };
+      return { error: err.message || 'Gagal menghapus transaksi' };
     }
   };
 
@@ -273,7 +286,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     color: string;
     icon: string;
   }) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       const { data: inserted, error } = await supabase
@@ -295,7 +308,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to create category' };
+      return { error: err.message || 'Gagal membuat kategori' };
     }
   };
 
@@ -308,7 +321,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       icon: string;
     }
   ) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       const { data: updated, error } = await supabase
@@ -336,12 +349,12 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to update category' };
+      return { error: err.message || 'Gagal memperbarui kategori' };
     }
   };
 
   const deleteCategory = async (id: string) => {
-    if (!user) return { error: 'Not authenticated' };
+    if (!user) return { error: 'Belum terautentikasi' };
 
     try {
       // Check if any transaction is using this category
@@ -349,7 +362,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (inUse) {
         return {
           error:
-            'This category is currently linked to existing transactions. Please delete or reassign those transactions first.',
+            'Kategori ini saat ini terhubung dengan transaksi yang ada. Harap hapus atau ubah transaksi tersebut terlebih dahulu.',
         };
       }
 
@@ -364,7 +377,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setCategories((prev) => prev.filter((c) => c.id !== id));
       return { error: null };
     } catch (err: any) {
-      return { error: err.message || 'Failed to delete category' };
+      return { error: err.message || 'Gagal menghapus kategori' };
     }
   };
 
@@ -405,7 +418,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 export const useFinance = () => {
   const context = useContext(FinanceContext);
   if (!context) {
-    throw new Error('useFinance must be used within a FinanceProvider');
+    throw new Error('useFinance harus digunakan di dalam FinanceProvider');
   }
   return context;
 };

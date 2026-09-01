@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -56,32 +55,32 @@ export const CategoryList: React.FC<CategoryListProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Header & Tab Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         {/* Type Filter Buttons */}
-        <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-xl w-fit">
+        <div className="grid grid-cols-2 sm:flex items-center gap-1.5 sm:gap-2 bg-gray-100 p-1 rounded-xl w-full sm:w-fit">
           <button
             type="button"
             onClick={() => setActiveTab('expense')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeTab === 'expense'
                 ? 'bg-white text-red-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <ArrowDownLeft className="w-4 h-4 text-red-500" />
-            Expense Categories ({categories.filter((c) => c.type === 'expense').length})
+            <ArrowDownLeft className="w-4 h-4 text-red-500 shrink-0" />
+            <span>Pengeluaran ({categories.filter((c) => c.type === 'expense').length})</span>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('income')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeTab === 'income'
                 ? 'bg-white text-emerald-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <ArrowUpRight className="w-4 h-4 text-emerald-500" />
-            Income Categories ({categories.filter((c) => c.type === 'income').length})
+            <ArrowUpRight className="w-4 h-4 text-emerald-500 shrink-0" />
+            <span>Pemasukan ({categories.filter((c) => c.type === 'income').length})</span>
           </button>
         </div>
 
@@ -90,33 +89,33 @@ export const CategoryList: React.FC<CategoryListProps> = ({
           variant="primary"
           size="md"
           leftIcon={<Plus className="w-4 h-4" />}
-          className="shadow-sm shadow-blue-500/20"
+          className="shadow-sm shadow-blue-500/20 font-semibold w-full sm:w-auto justify-center"
         >
-          Add Custom Category
+          Tambah Kategori Baru
         </Button>
       </div>
 
       {/* Categories Grid */}
       {filteredCategories.length === 0 ? (
         <Card padding="none">
-          <div className="p-8">
+          <div className="p-6 sm:p-8">
             <EmptyState
               icon={FolderKanban}
-              title={`No ${activeTab} categories yet`}
-              description={`Create your first custom ${activeTab} category to categorize your transactions.`}
-              actionLabel="Add Category"
+              title={`Belum ada kategori ${activeTab === 'expense' ? 'pengeluaran' : 'pemasukan'}`}
+              description={`Buat kategori ${activeTab === 'expense' ? 'pengeluaran' : 'pemasukan'} khusus Anda untuk mengelompokkan transaksi.`}
+              actionLabel="Tambah Kategori"
               onAction={onOpenAddModal}
             />
           </div>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {filteredCategories.map((cat) => (
             <Card
               key={cat.id}
               padding="sm"
               hoverEffect
-              className="flex items-center justify-between gap-3 group relative border-gray-200"
+              className="flex items-center justify-between gap-3 group relative border-gray-200 p-3.5 sm:p-4"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <CategoryIcon
@@ -124,26 +123,27 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                   type={cat.type}
                   color={cat.color}
                   size="md"
+                  className="w-9 h-9 sm:w-10 sm:h-10 shrink-0"
                 />
                 <div className="min-w-0">
                   <h4 className="text-sm font-semibold text-gray-900 truncate" title={cat.name}>
                     {cat.name}
                   </h4>
                   <p className="text-[11px] text-gray-400 capitalize">
-                    {cat.type} category
+                    Kategori {cat.type === 'income' ? 'pemasukan' : 'pengeluaran'}
                   </p>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-1 shrink-0 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
                   onClick={() => onEditCategory(cat)}
                   className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-                  title="Edit category"
+                  title="Edit kategori"
                 >
-                  <Edit2 className="w-4 h-4" />
+                  <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
                 <button
                   type="button"
@@ -152,9 +152,9 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                     setDeleteTarget(cat);
                   }}
                   className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                  title="Delete category"
+                  title="Hapus kategori"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </Card>
@@ -169,21 +169,21 @@ export const CategoryList: React.FC<CategoryListProps> = ({
           setDeleteTarget(null);
           setDeleteError(null);
         }}
-        title={`Delete Category: "${deleteTarget?.name}"`}
-        description="Are you sure you want to remove this category?"
+        title={`Hapus Kategori: "${deleteTarget?.name}"`}
+        description="Apakah Anda yakin ingin menghapus kategori ini?"
         maxWidth="sm"
       >
         <div className="space-y-4">
           {deleteError ? (
             <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl">
-              <div className="font-semibold mb-1">Cannot Delete Category</div>
+              <div className="font-semibold mb-1">Tidak Dapat Menghapus Kategori</div>
               <p>{deleteError}</p>
             </div>
           ) : (
             <div className="flex items-start gap-3 p-3 bg-amber-50 text-amber-900 rounded-xl text-xs">
               <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <span>
-                If you have transactions assigned to this category, you must reassign or delete those transactions before deleting this category.
+                Jika ada transaksi yang terhubung dengan kategori ini, Anda harus mengubah atau menghapus transaksi tersebut terlebih dahulu sebelum menghapus kategori ini.
               </span>
             </div>
           )}
@@ -198,7 +198,7 @@ export const CategoryList: React.FC<CategoryListProps> = ({
               }}
               disabled={isDeleting}
             >
-              Cancel
+              Batal
             </Button>
             <Button
               variant="danger"
@@ -207,7 +207,7 @@ export const CategoryList: React.FC<CategoryListProps> = ({
               isLoading={isDeleting}
               leftIcon={<Trash2 className="w-4 h-4" />}
             >
-              Delete
+              Hapus
             </Button>
           </div>
         </div>

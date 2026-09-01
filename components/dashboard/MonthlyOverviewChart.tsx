@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card, CardTitle } from '@/components/ui/Card';
 import { MonthlyChartData } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -30,10 +30,10 @@ export const MonthlyOverviewChart: React.FC<MonthlyOverviewChartProps> = ({
 
   const formatYAxis = (tickItem: number) => {
     if (tickItem >= 1000000) {
-      return `${(tickItem / 1000000).toFixed(1)}M`;
+      return `${(tickItem / 1000000).toFixed(1)} jt`;
     }
     if (tickItem >= 1000) {
-      return `${(tickItem / 1000).toFixed(0)}k`;
+      return `${(tickItem / 1000).toFixed(0)} rb`;
     }
     return tickItem.toString();
   };
@@ -45,11 +45,11 @@ export const MonthlyOverviewChart: React.FC<MonthlyOverviewChartProps> = ({
           <p className="font-bold text-gray-900 mb-2 border-b border-gray-100 pb-1">{label}</p>
           <div className="space-y-1">
             <p className="text-emerald-600 font-semibold flex items-center justify-between gap-4">
-              <span>Income:</span>
+              <span>Pemasukan:</span>
               <span>{formatCurrency(payload[0]?.value || 0)}</span>
             </p>
             <p className="text-red-600 font-semibold flex items-center justify-between gap-4">
-              <span>Expense:</span>
+              <span>Pengeluaran:</span>
               <span>{formatCurrency(payload[1]?.value || 0)}</span>
             </p>
           </div>
@@ -61,59 +61,59 @@ export const MonthlyOverviewChart: React.FC<MonthlyOverviewChartProps> = ({
 
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between">
         <div>
-          <CardTitle>Cash Flow Overview</CardTitle>
-          <p className="text-xs text-gray-500 mt-0.5">Income vs Expense trends over recent months</p>
+          <CardTitle className="text-base sm:text-lg">Ringkasan Arus Kas</CardTitle>
+          <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">Tren Pemasukan vs Pengeluaran beberapa bulan terakhir</p>
         </div>
       </div>
 
-      <div className="p-4 sm:p-6">
+      <div className="p-3 sm:p-6">
         {!hasData ? (
           <EmptyState
             icon={BarChart3}
-            title="No cash flow data yet"
-            description="Add your monthly income and expenses to generate visual analytics."
-            actionLabel="Add Transaction"
+            title="Belum ada data arus kas"
+            description="Tambahkan catatan pemasukan dan pengeluaran Anda untuk melihat grafik analitik visual."
+            actionLabel="Tambah Transaksi"
             onAction={onOpenAddModal}
           />
         ) : (
-          <div className="h-64 sm:h-72 w-full">
+          <div className="h-56 sm:h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <BarChart data={data} margin={{ top: 10, right: 5, left: -22, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
                 <XAxis
                   dataKey="month"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: '#64748B' }}
+                  tick={{ fontSize: 11, fill: '#64748B' }}
                 />
                 <YAxis
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={formatYAxis}
-                  tick={{ fontSize: 11, fill: '#94A3B8' }}
+                  tick={{ fontSize: 10, fill: '#94A3B8' }}
                 />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend
                   verticalAlign="top"
                   align="right"
                   iconType="circle"
-                  wrapperStyle={{ paddingBottom: '16px', fontSize: '12px' }}
+                  wrapperStyle={{ paddingBottom: '12px', fontSize: '11px' }}
                 />
                 <Bar
                   dataKey="income"
-                  name="Income"
+                  name="Pemasukan"
                   fill="#10B981"
                   radius={[4, 4, 0, 0]}
-                  maxBarSize={32}
+                  maxBarSize={28}
                 />
                 <Bar
                   dataKey="expense"
-                  name="Expense"
+                  name="Pengeluaran"
                   fill="#EF4444"
                   radius={[4, 4, 0, 0]}
-                  maxBarSize={32}
+                  maxBarSize={28}
                 />
               </BarChart>
             </ResponsiveContainer>

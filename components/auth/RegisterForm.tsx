@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { AlertNotification } from '@/components/ui/Toast';
-import { Mail, Lock, User, UserPlus, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User, UserPlus, ArrowRight } from 'lucide-react';
 import { DEFAULT_INCOME_CATEGORIES, DEFAULT_EXPENSE_CATEGORIES } from '@/lib/constants';
 
 export const RegisterForm: React.FC = () => {
@@ -26,17 +26,17 @@ export const RegisterForm: React.FC = () => {
     setSuccessMessage(null);
 
     if (!email || !password || !fullName) {
-      setErrorMessage('Please fill in all required fields.');
+      setErrorMessage('Silakan lengkapi seluruh data yang diminta.');
       return;
     }
 
     if (password.length < 6) {
-      setErrorMessage('Password must be at least 6 characters.');
+      setErrorMessage('Kata sandi minimal harus terdiri dari 6 karakter.');
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+      setErrorMessage('Konfirmasi kata sandi tidak cocok.');
       return;
     }
 
@@ -95,17 +95,17 @@ export const RegisterForm: React.FC = () => {
       }
 
       if (data.session) {
-        router.push('/');
+        router.push('/dashboard');
         router.refresh();
       } else {
         setSuccessMessage(
-          'Registration successful! Please check your email inbox to confirm your account, then log in.'
+          'Pendaftaran berhasil! Silakan periksa kotak masuk email Anda untuk verifikasi atau langsung login.'
         );
         setIsLoading(false);
       }
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : 'An unexpected error occurred during registration.'
+        err instanceof Error ? err.message : 'Terjadi kesalahan tak terduga saat pendaftaran.'
       );
       setIsLoading(false);
     }
@@ -118,10 +118,10 @@ export const RegisterForm: React.FC = () => {
           <UserPlus className="w-6 h-6" />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-          Create an account
+          Buat Akun Baru
         </h1>
         <p className="text-sm text-gray-500">
-          Start managing your personal and family finances seamlessly
+          Mulai atur dan catat keuangan pribadi & keluarga Anda dengan mudah
         </p>
       </div>
 
@@ -136,7 +136,7 @@ export const RegisterForm: React.FC = () => {
       {successMessage && (
         <AlertNotification
           type="success"
-          title="Account Created"
+          title="Akun Berhasil Dibuat"
           message={successMessage}
           onClose={() => setSuccessMessage(null)}
         />
@@ -144,11 +144,11 @@ export const RegisterForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Full Name"
+          label="Nama Lengkap"
           type="text"
           name="name"
           autoComplete="name"
-          placeholder="e.g. Raditya Pratama"
+          placeholder="Contoh: Raditya Pratama"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           leftIcon={<User className="w-4 h-4 text-gray-400" />}
@@ -156,11 +156,11 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Input
-          label="Email Address"
+          label="Alamat Email"
           type="email"
           name="email"
           autoComplete="email"
-          placeholder="name@example.com"
+          placeholder="nama@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           leftIcon={<Mail className="w-4 h-4 text-gray-400" />}
@@ -168,11 +168,11 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Input
-          label="Password"
+          label="Kata Sandi"
           type="password"
           name="password"
           autoComplete="new-password"
-          placeholder="At least 6 characters"
+          placeholder="Minimal 6 karakter"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           leftIcon={<Lock className="w-4 h-4 text-gray-400" />}
@@ -180,11 +180,11 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Input
-          label="Confirm Password"
+          label="Konfirmasi Kata Sandi"
           type="password"
           name="confirmPassword"
           autoComplete="new-password"
-          placeholder="Repeat your password"
+          placeholder="Ulangi kata sandi Anda"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           leftIcon={<Lock className="w-4 h-4 text-gray-400" />}
@@ -195,21 +195,21 @@ export const RegisterForm: React.FC = () => {
           type="submit"
           variant="primary"
           size="lg"
-          className="w-full mt-2"
+          className="w-full mt-2 font-semibold"
           isLoading={isLoading}
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
-          Create Account
+          Daftar Akun
         </Button>
       </form>
 
       <div className="text-center text-sm text-gray-500 pt-2 border-t border-gray-100">
-        Already have an account?{' '}
+        Sudah memiliki akun?{' '}
         <Link
           href="/login"
           className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
         >
-          Sign in
+          Masuk di sini
         </Link>
       </div>
     </div>

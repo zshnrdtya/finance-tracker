@@ -39,10 +39,10 @@ export default function CategoriesPage() {
       {/* Header */}
       <div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-          Category Management
+          Manajemen Kategori
         </h2>
         <p className="text-xs text-gray-500 mt-1">
-          Customize your income and expense categories to fit your personal or household budgeting.
+          Sesuaikan kategori pemasukan dan pengeluaran Anda untuk pengelolaan anggaran pribadi atau keluarga.
         </p>
       </div>
 

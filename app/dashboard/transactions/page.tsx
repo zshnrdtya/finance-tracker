@@ -41,7 +41,7 @@ export default function TransactionsPage() {
     description: string;
     date: string;
   }) => {
-    if (!editingTransaction) return { error: 'No transaction selected for edit' };
+    if (!editingTransaction) return { error: 'Tidak ada transaksi yang dipilih untuk diedit' };
     return await updateTransaction(editingTransaction.id, data);
   };
 
@@ -51,10 +51,10 @@ export default function TransactionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-            Transaction History
+            Riwayat Transaksi
           </h2>
           <p className="text-xs text-gray-500 mt-1">
-            Showing all recorded entries. Filter by category, type, or search keywords.
+            Menampilkan seluruh catatan transaksi. Filter berdasarkan kategori, tipe, atau kata kunci pencarian.
           </p>
         </div>
 
@@ -63,51 +63,51 @@ export default function TransactionsPage() {
           variant="primary"
           size="md"
           leftIcon={<Plus className="w-4 h-4" />}
-          className="shadow-sm shadow-blue-500/20 self-start sm:self-auto"
+          className="shadow-sm shadow-blue-500/20 w-full sm:w-auto justify-center"
         >
-          Add Transaction
+          Tambah Transaksi
         </Button>
       </div>
 
       {/* Quick Summary Pill Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-200 flex items-center justify-between min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="hidden sm:flex w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 items-center justify-center shrink-0">
               <ArrowUpRight className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase">Total Inflow</p>
-              <p className="text-base font-bold text-emerald-600">
+            <div className="min-w-0">
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase truncate">Pemasukan</p>
+              <p className="text-xs sm:text-base font-bold text-emerald-600 truncate" title={formatCurrency(totalIncome)}>
                 {formatCurrency(totalIncome)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+        <div className="bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-200 flex items-center justify-between min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="hidden sm:flex w-9 h-9 rounded-xl bg-red-50 text-red-600 items-center justify-center shrink-0">
               <ArrowDownLeft className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase">Total Outflow</p>
-              <p className="text-base font-bold text-red-600">
+            <div className="min-w-0">
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase truncate">Pengeluaran</p>
+              <p className="text-xs sm:text-base font-bold text-red-600 truncate" title={formatCurrency(totalExpense)}>
                 {formatCurrency(totalExpense)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+        <div className="bg-white p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-200 flex items-center justify-between min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="hidden sm:flex w-9 h-9 rounded-xl bg-blue-50 text-blue-600 items-center justify-center shrink-0">
               <ReceiptText className="w-5 h-5" />
             </div>
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase">Total Records</p>
-              <p className="text-base font-bold text-gray-900">
-                {transactions.length} transactions
+            <div className="min-w-0">
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase truncate">Total Data</p>
+              <p className="text-xs sm:text-base font-bold text-gray-900 truncate">
+                {transactions.length} entri
               </p>
             </div>
           </div>

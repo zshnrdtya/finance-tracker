@@ -13,8 +13,6 @@ import { Transaction, Category, TransactionType } from '@/lib/types';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import {
   Search,
-  Filter,
-  Plus,
   Trash2,
   Edit2,
   Calendar,
@@ -97,7 +95,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
           <div className="sm:col-span-5">
             <Input
               type="text"
-              placeholder="Search description, category, amount..."
+              placeholder="Cari deskripsi, kategori, nominal..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               leftIcon={<Search className="w-4 h-4 text-gray-400" />}
@@ -115,9 +113,9 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               }}
               className="h-10"
             >
-              <option value="all">All Types (Semua)</option>
-              <option value="income">Income (Pemasukan)</option>
-              <option value="expense">Expense (Pengeluaran)</option>
+              <option value="all">Semua Tipe (Pemasukan & Pengeluaran)</option>
+              <option value="income">Pemasukan Saja</option>
+              <option value="expense">Pengeluaran Saja</option>
             </Select>
           </div>
 
@@ -128,10 +126,10 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="h-10"
             >
-              <option value="all">All Categories (Semua Kategori)</option>
+              <option value="all">Semua Kategori</option>
               {filterCategories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
-                  {cat.name} ({cat.type === 'income' ? 'Income' : 'Expense'})
+                  {cat.name} ({cat.type === 'income' ? 'Pemasukan' : 'Pengeluaran'})
                 </option>
               ))}
             </Select>
@@ -141,7 +139,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         {/* Filter Summary Tags */}
         {(searchTerm || typeFilter !== 'all' || categoryFilter !== 'all') && (
           <div className="flex items-center gap-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
-            <span>Showing {filteredTransactions.length} of {transactions.length} records</span>
+            <span>Menampilkan {filteredTransactions.length} dari {transactions.length} catatan</span>
             <button
               onClick={() => {
                 setSearchTerm('');
@@ -150,7 +148,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               }}
               className="text-blue-600 font-semibold hover:underline cursor-pointer ml-auto"
             >
-              Reset Filters
+              Reset Filter
             </button>
           </div>
         )}
@@ -164,15 +162,15 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               icon={ReceiptText}
               title={
                 transactions.length === 0
-                  ? 'No transactions recorded yet'
-                  : 'No transactions match your search'
+                  ? 'Belum ada transaksi tercatat'
+                  : 'Tidak ada transaksi yang sesuai pencarian'
               }
               description={
                 transactions.length === 0
-                  ? 'Click the button below to add your first income or expense.'
-                  : 'Try adjusting your search keywords or filter settings.'
+                  ? 'Klik tombol di bawah untuk menambahkan catatan pemasukan atau pengeluaran pertama Anda.'
+                  : 'Coba sesuaikan kata kunci pencarian atau pengaturan filter Anda.'
               }
-              actionLabel={transactions.length === 0 ? 'Add Transaction' : 'Clear Filters'}
+              actionLabel={transactions.length === 0 ? 'Tambah Transaksi' : 'Bersihkan Filter'}
               onAction={
                 transactions.length === 0
                   ? onOpenAddModal
@@ -194,31 +192,32 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   className="p-4 sm:px-6 flex items-center justify-between hover:bg-gray-50/80 transition-colors group"
                 >
                   {/* Left: Category Icon & Details */}
-                  <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex items-center gap-2 sm:gap-3.5 min-w-0">
                     <CategoryIcon
                       iconName={t.category?.icon}
                       type={isIncome ? 'income' : 'expense'}
                       color={t.category?.color}
                       size="md"
+                      className="w-9 h-9 sm:w-10 sm:h-10 shrink-0"
                     />
 
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-gray-900 truncate">
-                          {t.category?.name || 'Uncategorized'}
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="text-xs sm:text-sm font-semibold text-gray-900 truncate max-w-[130px] sm:max-w-xs">
+                          {t.category?.name || 'Tanpa Kategori'}
                         </span>
-                        <Badge variant={isIncome ? 'success' : 'danger'} size="sm">
-                          {isIncome ? 'Income' : 'Expense'}
+                        <Badge variant={isIncome ? 'success' : 'danger'} size="sm" className="px-1.5 py-0 text-[10px]">
+                          {isIncome ? 'Pemasukan' : 'Pengeluaran'}
                         </Badge>
                       </div>
 
-                      <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500">
-                        <span className="flex items-center gap-1 text-gray-400">
-                          <Calendar className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-2 mt-0.5 text-[11px] sm:text-xs text-gray-500">
+                        <span className="flex items-center gap-1 text-gray-400 shrink-0">
+                          <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           {formatDate(t.date, 'short')}
                         </span>
                         {t.description && (
-                          <span className="truncate max-w-[180px] sm:max-w-md text-gray-600 font-medium">
+                          <span className="truncate max-w-[120px] sm:max-w-md text-gray-600 font-medium">
                             &bull; {t.description}
                           </span>
                         )}
@@ -227,10 +226,10 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   </div>
 
                   {/* Right: Amount & Actions */}
-                  <div className="flex items-center gap-3 shrink-0 ml-3">
+                  <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 ml-2">
                     <div className="text-right">
                       <span
-                        className={`text-sm sm:text-base font-bold tracking-tight ${
+                        className={`text-xs sm:text-base font-bold tracking-tight block whitespace-nowrap ${
                           isIncome ? 'text-emerald-600' : 'text-red-600'
                         }`}
                       >
@@ -239,20 +238,20 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                     </div>
 
                     {/* Action buttons (Edit / Delete) */}
-                    <div className="flex items-center gap-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-0.5 sm:gap-1">
                       <button
                         onClick={() => onEditTransaction(t)}
                         className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
-                        title="Edit transaction"
+                        title="Edit transaksi"
                       >
-                        <Edit2 className="w-4 h-4" />
+                        <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
                       <button
                         onClick={() => setDeleteTargetId(t.id)}
                         className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                        title="Delete transaction"
+                        title="Hapus transaksi"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </div>
@@ -267,14 +266,14 @@ export const TransactionList: React.FC<TransactionListProps> = ({
       <Modal
         isOpen={Boolean(deleteTargetId)}
         onClose={() => setDeleteTargetId(null)}
-        title="Delete Transaction"
-        description="Are you sure you want to delete this transaction? This action cannot be undone."
+        title="Hapus Transaksi"
+        description="Apakah Anda yakin ingin menghapus transaksi ini? Tindakan ini tidak dapat dibatalkan."
         maxWidth="sm"
       >
         <div className="space-y-4">
           <div className="flex items-center gap-3 p-3 bg-red-50 text-red-800 rounded-xl text-xs">
             <AlertTriangle className="w-5 h-5 text-red-600 shrink-0" />
-            <span>This will permanently remove the transaction from your records and recalculate balances.</span>
+            <span>Catatan transaksi ini akan dihapus permanen dan saldo Anda akan dihitung ulang secara otomatis.</span>
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2">
@@ -284,7 +283,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               onClick={() => setDeleteTargetId(null)}
               disabled={isDeleting}
             >
-              Cancel
+              Batal
             </Button>
             <Button
               variant="danger"
@@ -293,7 +292,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
               isLoading={isDeleting}
               leftIcon={<Trash2 className="w-4 h-4" />}
             >
-              Delete
+              Hapus
             </Button>
           </div>
         </div>

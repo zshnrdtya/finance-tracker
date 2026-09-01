@@ -21,7 +21,7 @@ export const LoginForm: React.FC = () => {
     setErrorMessage(null);
 
     if (!email || !password) {
-      setErrorMessage('Please fill in all fields.');
+      setErrorMessage('Silakan isi seluruh kolom yang tersedia.');
       return;
     }
 
@@ -36,7 +36,7 @@ export const LoginForm: React.FC = () => {
 
       if (error) {
         if (error.message.toLowerCase().includes('invalid login credentials')) {
-          setErrorMessage('Invalid email or password. Please check your credentials.');
+          setErrorMessage('Email atau kata sandi salah. Silakan periksa kembali kredensial Anda.');
         } else {
           setErrorMessage(error.message);
         }
@@ -45,12 +45,12 @@ export const LoginForm: React.FC = () => {
       }
 
       if (data.session) {
-        router.push('/');
+        router.push('/dashboard');
         router.refresh();
       }
     } catch (err: unknown) {
       setErrorMessage(
-        err instanceof Error ? err.message : 'An unexpected error occurred during login.'
+        err instanceof Error ? err.message : 'Terjadi kesalahan tak terduga saat masuk.'
       );
       setIsLoading(false);
     }
@@ -63,10 +63,10 @@ export const LoginForm: React.FC = () => {
           <LogIn className="w-6 h-6" />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
-          Welcome back
+          Selamat Datang Kembali
         </h1>
         <p className="text-sm text-gray-500">
-          Enter your credentials to access your personal finance dashboard
+          Masukkan akun Anda untuk mengakses dasbor keuangan pribadi
         </p>
       </div>
 
@@ -80,26 +80,26 @@ export const LoginForm: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Email Address"
+          label="Alamat Email"
           type="email"
           name="email"
           autoComplete="email"
-          placeholder="name@example.com"
+          placeholder="nama@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          leftIcon={<Mail className="w-4 h-4" />}
+          leftIcon={<Mail className="w-4 h-4 text-gray-400" />}
           required
         />
 
         <Input
-          label="Password"
+          label="Kata Sandi"
           type="password"
           name="password"
           autoComplete="current-password"
           placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          leftIcon={<Lock className="w-4 h-4" />}
+          leftIcon={<Lock className="w-4 h-4 text-gray-400" />}
           required
         />
 
@@ -107,21 +107,21 @@ export const LoginForm: React.FC = () => {
           type="submit"
           variant="primary"
           size="lg"
-          className="w-full mt-2"
+          className="w-full mt-2 font-semibold"
           isLoading={isLoading}
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
-          Sign In
+          Masuk ke Akun
         </Button>
       </form>
 
       <div className="text-center text-sm text-gray-500 pt-2 border-t border-gray-100">
-        Don&apos;t have an account?{' '}
+        Belum punya akun?{' '}
         <Link
-          href="/register"
+          href="/login?mode=register"
           className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
         >
-          Create account
+          Daftar Sekarang
         </Link>
       </div>
     </div>

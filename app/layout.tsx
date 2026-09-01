@@ -10,9 +10,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'FinanceTrack - Personal & Family Finance Tracker',
+  title: 'FinanceTrack - Pelacak Keuangan Pribadi & Keluarga',
   description:
-    'A modern, multi-user personal finance tracker web application to track income, expenses, and visual financial reports with Supabase.',
+    'Aplikasi web pelacak keuangan pribadi dan keluarga modern untuk mencatat pemasukan, pengeluaran, dan visualisasi laporan keuangan.',
   icons: {
     icon: '/favicon.ico',
   },
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} h-full antialiased`}>
+    <html lang="id" className={`${plusJakartaSans.variable} h-full antialiased`}>
       <body className="min-h-full font-sans bg-gray-50 text-gray-900 antialiased flex flex-col selection:bg-blue-600 selection:text-white">
         {children}
       </body>

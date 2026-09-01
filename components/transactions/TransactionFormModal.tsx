@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { AlertNotification } from '@/components/ui/Toast';
 import { Category, Transaction, TransactionType } from '@/lib/types';
-import { toDateInputValue } from '@/lib/utils';
+import { toDateInputValue, formatNumberWithDots, parseCurrencyInput, formatCurrency } from '@/lib/utils';
 import { ArrowUpRight, ArrowDownLeft, Calendar, Tag, FileText, Check } from 'lucide-react';
 
 interface TransactionFormModalProps {
@@ -56,7 +56,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
   useEffect(() => {
     if (transactionToEdit) {
       setType(transactionToEdit.category?.type || 'expense');
-      setAmount(transactionToEdit.amount.toString());
+      setAmount(formatNumberWithDots(transactionToEdit.amount));
       setCategoryId(transactionToEdit.category_id);
       setDescription(transactionToEdit.description || '');
       setDate(
@@ -83,28 +83,36 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
     setCategoryId(firstCat ? firstCat.id : '');
   };
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawVal = e.target.value;
+    const formatted = formatNumberWithDots(rawVal);
+    setAmount(formatted);
+  };
+
+  const parsedAmountNumber = parseCurrencyInput(amount);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    const parsedAmount = parseFloat(amount.replace(/[^0-9.]/g, ''));
-    if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      setErrorMessage('Please enter a valid amount greater than 0.');
+    const parsedAmount = parseCurrencyInput(amount);
+    if (parsedAmount <= 0) {
+      setErrorMessage('Masukkan nominal yang valid lebih besar dari 0.');
       return;
     }
 
     if (!categoryId) {
-      setErrorMessage('Please select a category.');
+      setErrorMessage('Silakan pilih salah satu kategori.');
       return;
     }
 
     if (!date) {
-      setErrorMessage('Please choose a valid transaction date.');
+      setErrorMessage('Pilih tanggal transaksi yang valid.');
       return;
     }
 
     if (isOtherCategory && (!description || description.trim().length === 0)) {
-      setErrorMessage('Please describe the source / reason for "Other" category.');
+      setErrorMessage('Mohon tuliskan keterangan / sumber dana untuk kategori "Lainnya".');
       return;
     }
 
@@ -129,7 +137,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
       onSuccess();
       onClose();
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Failed to save transaction');
+      setErrorMessage(err instanceof Error ? err.message : 'Gagal menyimpan transaksi');
       setIsLoading(false);
     }
   };
@@ -138,11 +146,11 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={transactionToEdit ? 'Edit Transaction' : 'Add New Transaction'}
+      title={transactionToEdit ? 'Edit Transaksi' : 'Tambah Transaksi Baru'}
       description={
         transactionToEdit
-          ? 'Modify details for this transaction entry'
-          : 'Record a new income or expense in your tracker'
+          ? 'Perbarui detail data transaksi yang dipilih'
+          : 'Catat pemasukan atau pengeluaran baru di akun Anda'
       }
       maxWidth="md"
     >
@@ -158,7 +166,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         {/* Transaction Type Segmented Toggle */}
         <div>
           <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-            Transaction Type
+            Tipe Transaksi
           </label>
           <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl">
             <button
@@ -171,7 +179,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
               }`}
             >
               <ArrowDownLeft className="w-4 h-4 text-red-500" />
-              Expense (Pengeluaran)
+              Pengeluaran
             </button>
             <button
               type="button"
@@ -183,7 +191,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
               }`}
             >
               <ArrowUpRight className="w-4 h-4 text-emerald-500" />
-              Income (Pemasukan)
+              Pemasukan
             </button>
           </div>
         </div>
@@ -191,22 +199,41 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         {/* Amount Input */}
         <div>
           <Input
-            label="Amount (Rp)"
-            type="number"
-            min="1"
-            step="any"
-            placeholder="e.g. 50000"
+            label="Nominal (Rp)"
+            type="text"
+            inputMode="numeric"
+            placeholder="Contoh: 50.000 atau 74.000"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="text-lg font-semibold"
+            onChange={handleAmountChange}
+            className="text-lg font-bold text-gray-900 tracking-tight"
+            helperText={
+              parsedAmountNumber > 0
+                ? `Nominal tersimpan: ${formatCurrency(parsedAmountNumber)}`
+                : 'Format otomatis ribuan (contoh: 74.000)'
+            }
             required
           />
+
+          {/* Quick preset amount buttons */}
+          <div className="flex flex-wrap items-center gap-1.5 mt-2">
+            <span className="text-[11px] text-gray-400 mr-1">Cepat:</span>
+            {[10000, 20000, 50000, 74000, 100000, 500000, 1000000].map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => setAmount(formatNumberWithDots(preset))}
+                className="px-2 py-0.5 text-xs font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 border border-transparent transition-all cursor-pointer"
+              >
+                +{formatNumberWithDots(preset)}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Category Dropdown */}
         <div>
           <Select
-            label="Category"
+            label="Kategori"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             leftIcon={<Tag className="w-4 h-4" />}
@@ -214,7 +241,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
           >
             {availableCategories.length === 0 ? (
               <option value="" disabled>
-                No categories found for {type}
+                Tidak ada kategori untuk {type === 'income' ? 'pemasukan' : 'pengeluaran'}
               </option>
             ) : (
               availableCategories.map((cat) => (
@@ -231,16 +258,16 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
           <Input
             label={
               isOtherCategory
-                ? 'Description / Detail (Required for "Other")'
-                : 'Description / Note (Optional)'
+                ? 'Keterangan / Sumber (Wajib untuk "Lainnya")'
+                : 'Keterangan / Catatan (Opsional)'
             }
             type="text"
             placeholder={
               isOtherCategory
                 ? type === 'income'
-                  ? 'e.g. Dikasih teman, Jual barang bekas'
-                  : 'e.g. Beli pulsa darurat, Donasi'
-                : 'e.g. Makan siang, Bensin, Gaji Pokok'
+                  ? 'Contoh: Dikasih teman, Jual barang bekas'
+                  : 'Contoh: Beli pulsa darurat, Donasi'
+                : 'Contoh: Makan siang, Bensin, Gaji Pokok'
             }
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -248,7 +275,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
             required={isOtherCategory}
             helperText={
               isOtherCategory
-                ? 'Please specify what this "Other" transaction was for.'
+                ? 'Jelaskan tujuan atau asal dana transaksi kategori "Lainnya" ini.'
                 : undefined
             }
           />
@@ -257,7 +284,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         {/* Date Input */}
         <div>
           <Input
-            label="Date"
+            label="Tanggal"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -267,17 +294,24 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-gray-100">
-          <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
-            Cancel
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 pt-4 border-t border-gray-100">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            disabled={isLoading}
+            className="w-full sm:w-auto justify-center"
+          >
+            Batal
           </Button>
           <Button
             type="submit"
             variant="primary"
             isLoading={isLoading}
             leftIcon={<Check className="w-4 h-4" />}
+            className="font-semibold w-full sm:w-auto justify-center"
           >
-            {transactionToEdit ? 'Save Changes' : 'Add Transaction'}
+            {transactionToEdit ? 'Simpan Perubahan' : 'Tambah Transaksi'}
           </Button>
         </div>
       </form>

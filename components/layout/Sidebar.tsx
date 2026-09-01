@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -10,7 +11,6 @@ import {
   FolderKanban,
   LogOut,
   PlusCircle,
-  WalletCards,
   User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -41,19 +41,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       active: pathname === '/dashboard',
     },
     {
-      label: 'Transactions',
+      label: 'Transaksi',
       href: '/dashboard/transactions',
       icon: ReceiptText,
       active: pathname.startsWith('/dashboard/transactions'),
     },
     {
-      label: 'Analytics & Reports',
+      label: 'Laporan & Analisis',
       href: '/dashboard/analytics',
       icon: PieChart,
       active: pathname.startsWith('/dashboard/analytics'),
     },
     {
-      label: 'Categories',
+      label: 'Kategori',
       href: '/dashboard/categories',
       icon: FolderKanban,
       active: pathname.startsWith('/dashboard/categories'),
@@ -71,15 +71,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full select-none">
       {/* Brand Logo */}
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3" onClick={onCloseMobile}>
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/25">
-            <WalletCards className="w-6 h-6" />
+        <Link href="/dashboard" className="flex items-center gap-3" onClick={onCloseMobile}>
+          <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center shrink-0 shadow-sm border border-gray-100 bg-white">
+            <Image
+              src="/asset/logo zz.png"
+              alt="FinanceTrack Logo"
+              width={40}
+              height={40}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
           <div>
             <span className="text-lg font-bold tracking-tight text-gray-900">
               Finance<span className="text-blue-600">Track</span>
             </span>
-            <p className="text-[11px] font-medium text-gray-400">Personal & Family</p>
+            <p className="text-[11px] font-medium text-gray-400">Pribadi & Keluarga</p>
           </div>
         </Link>
       </div>
@@ -94,10 +101,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             }}
             variant="primary"
             size="md"
-            className="w-full shadow-sm shadow-blue-600/20 hover:shadow-md hover:shadow-blue-600/30"
+            className="w-full shadow-sm shadow-blue-600/20 hover:shadow-md hover:shadow-blue-600/30 font-semibold"
             leftIcon={<PlusCircle className="w-4 h-4" />}
           >
-            New Transaction
+            Transaksi Baru
           </Button>
         </div>
       )}
@@ -135,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-semibold text-gray-900 truncate">
-              {userName || 'Personal Account'}
+              {userName || 'Akun Pribadi'}
             </p>
             <p className="text-[11px] text-gray-500 truncate" title={userEmail}>
               {userEmail || 'user@example.com'}
@@ -148,7 +155,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-red-100"
         >
           <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>Keluar Akun</span>
         </button>
 
         <p className="mt-3 text-[10px] text-center text-gray-400 font-medium">

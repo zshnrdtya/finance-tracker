@@ -32,6 +32,27 @@ export function formatCurrency(amount: number, currency: 'IDR' | 'USD' = 'IDR'):
 }
 
 /**
+ * Formats a raw number or string with Indonesian dot thousand separators (e.g. 74000 -> "74.000")
+ */
+export function formatNumberWithDots(value: number | string | null | undefined): string {
+  if (value === '' || value === null || value === undefined) return '';
+  const digits = value.toString().replace(/\D/g, '');
+  if (!digits) return '';
+  return new Intl.NumberFormat('id-ID').format(Number(digits));
+}
+
+/**
+ * Parses user input currency string into clean integer amount.
+ * Prevents Indonesian thousand separators ("74.000" or "74,000") from being parsed as decimals ("74").
+ */
+export function parseCurrencyInput(value: string | number | null | undefined): number {
+  if (value === '' || value === null || value === undefined) return 0;
+  if (typeof value === 'number') return value;
+  const digits = value.toString().replace(/\D/g, '');
+  return digits ? Number(digits) : 0;
+}
+
+/**
  * Formats a date string or Date object into human-readable format
  */
 export function formatDate(

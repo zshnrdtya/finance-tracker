@@ -55,7 +55,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
     setErrorMessage(null);
 
     if (!name.trim()) {
-      setErrorMessage('Category name is required.');
+      setErrorMessage('Nama kategori wajib diisi.');
       return;
     }
 
@@ -78,7 +78,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
       setIsLoading(false);
       onClose();
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Failed to save category');
+      setErrorMessage(err instanceof Error ? err.message : 'Gagal menyimpan kategori');
       setIsLoading(false);
     }
   };
@@ -87,11 +87,11 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={categoryToEdit ? 'Edit Category' : 'Create Custom Category'}
+      title={categoryToEdit ? 'Edit Kategori' : 'Buat Kategori Kustom'}
       description={
         categoryToEdit
-          ? 'Update the category attributes and visuals'
-          : 'Define a new category to classify your income or expenses'
+          ? 'Perbarui nama, warna, dan ikon untuk kategori ini'
+          : 'Buat kategori baru untuk mengelompokkan pengeluaran atau pemasukan Anda'
       }
       maxWidth="md"
     >
@@ -107,7 +107,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         {/* Category Type */}
         <div>
           <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-            Category Type
+            Tipe Kategori
           </label>
           <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-xl">
             <button
@@ -120,7 +120,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
               }`}
             >
               <ArrowDownLeft className="w-4 h-4 text-red-500" />
-              Expense
+              Pengeluaran
             </button>
             <button
               type="button"
@@ -132,7 +132,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
               }`}
             >
               <ArrowUpRight className="w-4 h-4 text-emerald-500" />
-              Income
+              Pemasukan
             </button>
           </div>
         </div>
@@ -140,9 +140,9 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         {/* Category Name */}
         <div>
           <Input
-            label="Category Name"
+            label="Nama Kategori"
             type="text"
-            placeholder="e.g. Asuransi, Langganan Netflix, Bonus"
+            placeholder="Contoh: Asuransi, Langganan Netflix, Bonus"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -152,7 +152,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         {/* Color Picker */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Theme Color
+            Warna Tema
           </label>
           <div className="flex flex-wrap gap-2">
             {CATEGORY_COLORS.map((c) => (
@@ -164,7 +164,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
                   color === c ? 'scale-110 border-gray-900 shadow-sm' : 'border-transparent hover:scale-105'
                 }`}
                 style={{ backgroundColor: c }}
-                aria-label={`Select color ${c}`}
+                aria-label={`Pilih warna ${c}`}
               />
             ))}
           </div>
@@ -173,7 +173,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         {/* Icon Picker */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Category Icon
+            Ikon Kategori
           </label>
           <div className="grid grid-cols-6 sm:grid-cols-9 gap-2 max-h-40 overflow-y-auto p-1 border border-gray-200 rounded-xl">
             {CATEGORY_ICONS.map((ic) => {
@@ -198,17 +198,24 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-gray-100">
-          <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
-            Cancel
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 pt-4 border-t border-gray-100">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            disabled={isLoading}
+            className="w-full sm:w-auto justify-center"
+          >
+            Batal
           </Button>
           <Button
             type="submit"
             variant="primary"
             isLoading={isLoading}
             leftIcon={<Check className="w-4 h-4" />}
+            className="font-semibold w-full sm:w-auto justify-center"
           >
-            {categoryToEdit ? 'Save Changes' : 'Create Category'}
+            {categoryToEdit ? 'Simpan Perubahan' : 'Buat Kategori'}
           </Button>
         </div>
       </form>

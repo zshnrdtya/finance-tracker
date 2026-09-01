@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card';
+import React from 'react';
+import { Card, CardTitle } from '@/components/ui/Card';
 import { CategoryExpenseBreakdown } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -10,7 +10,6 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend,
 } from 'recharts';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PieChart as PieChartIcon } from 'lucide-react';
@@ -23,11 +22,9 @@ interface ExpensePieChartProps {
 
 export const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
   data,
-  title = 'Expense Breakdown by Category',
+  title = 'Distribusi Pengeluaran per Kategori',
   type = 'expense',
 }) => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
   const totalAmount = data.reduce((acc, curr) => acc + curr.total, 0);
 
   const CustomTooltip = ({ active, payload }: any) => {
@@ -44,7 +41,7 @@ export const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
           </div>
           <p className="text-gray-600 font-semibold">{formatCurrency(item.total)}</p>
           <p className="text-gray-400 mt-0.5">
-            {item.percentage}% of total {type} ({item.count} transactions)
+            {item.percentage}% dari total {type === 'expense' ? 'pengeluaran' : 'pemasukan'} ({item.count} transaksi)
           </p>
         </div>
       );
@@ -54,27 +51,27 @@ export const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
 
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between">
         <div>
-          <CardTitle>{title}</CardTitle>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Total {type === 'expense' ? 'Spending' : 'Earnings'}:{' '}
-            <strong className="text-gray-900">{formatCurrency(totalAmount)}</strong>
+          <CardTitle className="text-base sm:text-lg">{title}</CardTitle>
+          <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
+            Total {type === 'expense' ? 'Pengeluaran' : 'Pemasukan'}:{' '}
+            <strong className="text-gray-900 font-bold">{formatCurrency(totalAmount)}</strong>
           </p>
         </div>
       </div>
 
-      <div className="p-4 sm:p-6">
+      <div className="p-3 sm:p-6">
         {data.length === 0 || totalAmount === 0 ? (
           <EmptyState
             icon={PieChartIcon}
-            title={`No ${type} data available`}
-            description={`Log your ${type} transactions to view category distribution.`}
+            title={`Belum ada data ${type === 'expense' ? 'pengeluaran' : 'pemasukan'}`}
+            description={`Catat transaksi ${type === 'expense' ? 'pengeluaran' : 'pemasukan'} Anda untuk melihat proporsi kategori.`}
           />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-center">
             {/* Pie Chart Canvas */}
-            <div className="h-64 md:col-span-7 w-full flex items-center justify-center">
+            <div className="h-56 sm:h-64 md:col-span-7 w-full flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Tooltip content={<CustomTooltip />} />
@@ -82,8 +79,8 @@ export const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
                     data={data}
                     cx="50%"
                     cy="50%"
-                    innerRadius={55}
-                    outerRadius={85}
+                    innerRadius={50}
+                    outerRadius={80}
                     paddingAngle={3}
                     dataKey="total"
                   >
@@ -101,7 +98,7 @@ export const ExpensePieChart: React.FC<ExpensePieChartProps> = ({
             </div>
 
             {/* Category Legend List with Percentage */}
-            <div className="md:col-span-5 space-y-2 max-h-64 overflow-y-auto pr-2">
+            <div className="md:col-span-5 space-y-1.5 sm:space-y-2 max-h-52 sm:max-h-64 overflow-y-auto pr-1">
               {data.map((cat) => (
                 <div
                   key={cat.id}

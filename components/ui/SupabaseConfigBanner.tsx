@@ -71,8 +71,8 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
           <div className="flex items-center gap-2.5">
             <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
             <span>
-              <strong>Supabase Setup Required:</strong> Please connect your Supabase project in{' '}
-              <code className="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">.env.local</code> and run the SQL schema.
+              <strong>Konfigurasi Supabase Diperlukan:</strong> Harap hubungkan proyek Supabase Anda di{' '}
+              <code className="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">.env.local</code> dan jalankan skema SQL.
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -83,7 +83,7 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
               className="bg-white border-amber-300 text-amber-900 hover:bg-amber-100 h-8"
               leftIcon={<Code className="w-3.5 h-3.5" />}
             >
-              View SQL Schema
+              Lihat Skema SQL
             </Button>
             <a
               href="https://supabase.com/dashboard"
@@ -91,7 +91,7 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-colors h-8"
             >
-              Supabase Dashboard <ExternalLink className="w-3 h-3" />
+              Dasbor Supabase <ExternalLink className="w-3 h-3" />
             </a>
           </div>
         </div>
@@ -100,15 +100,15 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Supabase Database Setup Instructions"
-        description="Follow these 2 quick steps to initialize your multi-user database."
+        title="Petunjuk Konfigurasi Database Supabase"
+        description="Ikuti 2 langkah mudah ini untuk menginisialisasi database Anda."
         maxWidth="lg"
       >
         <div className="space-y-4 text-sm text-gray-600">
           <div>
-            <h4 className="font-semibold text-gray-900 mb-1">1. Update your .env.local file</h4>
+            <h4 className="font-semibold text-gray-900 mb-1">1. Perbarui file .env.local Anda</h4>
             <p className="mb-2 text-xs">
-              Go to your Supabase Project Settings &rarr; API, then copy your Project URL and Anon API Key into <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800">.env.local</code>:
+              Buka Pengaturan Proyek Supabase &rarr; API, lalu salin URL Proyek dan Anon API Key ke dalam <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800">.env.local</code>:
             </p>
             <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg text-xs font-mono overflow-x-auto">
               NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co&#10;NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
@@ -117,17 +117,17 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <h4 className="font-semibold text-gray-900">2. Run SQL in Supabase SQL Editor</h4>
+              <h4 className="font-semibold text-gray-900">2. Jalankan SQL di Editor SQL Supabase</h4>
               <button
                 onClick={copySql}
                 className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                {copied ? 'Copied!' : 'Copy SQL'}
+                {copied ? 'Tersalin!' : 'Salin SQL'}
               </button>
             </div>
             <p className="mb-2 text-xs">
-              Open Supabase SQL Editor, paste the SQL below (or full script from <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800">supabase/schema.sql</code>), and click <strong>Run</strong>.
+              Buka Editor SQL Supabase, tempel skrip SQL di bawah ini (atau skrip lengkap dari <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-800">supabase/schema.sql</code>), lalu klik <strong>Run</strong>.
             </p>
             <div className="relative">
               <pre className="bg-gray-900 text-gray-100 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-52">
@@ -138,7 +138,7 @@ CREATE POLICY "Users can delete own transactions" ON public.transactions FOR DEL
 
           <div className="pt-2 flex justify-end">
             <Button variant="primary" size="sm" onClick={() => setIsModalOpen(false)}>
-              Got it
+              Mengerti
             </Button>
           </div>
         </div>

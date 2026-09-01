@@ -21,10 +21,10 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-          Financial Reports & Analytics
+          Laporan & Analitik Keuangan
         </h2>
         <p className="text-xs text-gray-500 mt-1">
-          Detailed visual breakdown of spending habits, income sources, and monthly trends.
+          Rincian visual kebiasaan pengeluaran, sumber pemasukan, dan tren bulanan.
         </p>
       </div>
 
@@ -39,33 +39,33 @@ export default function AnalyticsPage() {
       <div className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h3 className="text-lg font-bold text-gray-900">
-            Category Distribution
+            Distribusi Kategori
           </h3>
 
-          <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-xl w-fit">
+          <div className="grid grid-cols-2 sm:flex items-center gap-1.5 sm:gap-2 bg-gray-100 p-1 rounded-xl w-full sm:w-fit">
             <button
               type="button"
               onClick={() => setBreakdownType('expense')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 breakdownType === 'expense'
                   ? 'bg-white text-red-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <ArrowDownLeft className="w-3.5 h-3.5" />
-              Expense Distribution
+              <span>Pengeluaran</span>
             </button>
             <button
               type="button"
               onClick={() => setBreakdownType('income')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 breakdownType === 'income'
                   ? 'bg-white text-emerald-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
               <ArrowUpRight className="w-3.5 h-3.5" />
-              Income Distribution
+              <span>Pemasukan</span>
             </button>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
             <ExpensePieChart
               data={currentBreakdown}
               type={breakdownType}
-              title={`${breakdownType === 'expense' ? 'Expenses' : 'Income'} by Category`}
+              title={`${breakdownType === 'expense' ? 'Pengeluaran' : 'Pemasukan'} Berdasarkan Kategori`}
             />
           </div>
 

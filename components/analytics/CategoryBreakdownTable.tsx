@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Card, CardTitle } from '@/components/ui/Card';
 import { CategoryExpenseBreakdown } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -14,17 +14,15 @@ export const CategoryBreakdownTable: React.FC<CategoryBreakdownTableProps> = ({
   data,
   type = 'expense',
 }) => {
-  const total = data.reduce((acc, curr) => acc + curr.total, 0);
-
   return (
     <Card padding="none" className="overflow-hidden">
-      <div className="p-5 sm:p-6 border-b border-gray-100 flex items-center justify-between">
+      <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between">
         <div>
-          <CardTitle>
-            {type === 'expense' ? 'Expense' : 'Income'} Category Rankings
+          <CardTitle className="text-base sm:text-lg">
+            Peringkat Kategori {type === 'expense' ? 'Pengeluaran' : 'Pemasukan'}
           </CardTitle>
-          <p className="text-xs text-gray-500 mt-0.5">
-            Breakdown sorted by highest volume and percentage share
+          <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5">
+            Rincian diurutkan berdasarkan nominal terbesar dan persentase
           </p>
         </div>
       </div>
@@ -33,12 +31,12 @@ export const CategoryBreakdownTable: React.FC<CategoryBreakdownTableProps> = ({
         <div className="p-6">
           <EmptyState
             icon={Layers}
-            title={`No ${type} categories recorded`}
-            description="Start logging transactions to see detailed rankings."
+            title={`Belum ada data ${type === 'expense' ? 'pengeluaran' : 'pemasukan'}`}
+            description="Mulai catat transaksi untuk melihat peringkat kategori secara detail."
           />
         </div>
       ) : (
-        <div className="p-5 sm:p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-3.5 sm:space-y-4">
           {data.map((cat, index) => (
             <div key={cat.id} className="space-y-1.5">
               <div className="flex items-center justify-between text-xs sm:text-sm">
@@ -50,7 +48,7 @@ export const CategoryBreakdownTable: React.FC<CategoryBreakdownTableProps> = ({
                   />
                   <span>{cat.name}</span>
                   <span className="text-gray-400 text-xs hidden sm:inline">
-                    ({cat.count} {cat.count === 1 ? 'record' : 'records'})
+                    ({cat.count} transaksi)
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
