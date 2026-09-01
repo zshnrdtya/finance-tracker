@@ -45,6 +45,10 @@ export interface SummaryStats {
   netSavings: number;
   savingsRate: number;
   transactionCount: number;
+  todayIncome?: number;
+  todayExpense?: number;
+  dailyAverageExpense?: number;
+  monthlyTransactionCount?: number;
 }
 
 export interface CategoryExpenseBreakdown {

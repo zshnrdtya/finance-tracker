@@ -100,30 +100,50 @@ export function calculateSummaryStats(transactions: Transaction[]): SummaryStats
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
 
   let totalIncome = 0;
   let totalExpense = 0;
   let monthlyIncome = 0;
   let monthlyExpense = 0;
+  let todayIncome = 0;
+  let todayExpense = 0;
+  let monthlyTransactionCount = 0;
 
   for (const t of transactions) {
     const amount = Number(t.amount) || 0;
     const isIncome = t.category?.type === 'income';
-    const tDate = new Date(t.date);
+    const tDate =
+      typeof t.date === 'string' && t.date.length === 10
+        ? new Date(`${t.date}T00:00:00`)
+        : new Date(t.date);
+
+    const isValidDate = !isNaN(tDate.getTime());
     const isThisMonth =
-      !isNaN(tDate.getTime()) &&
+      isValidDate &&
       tDate.getFullYear() === currentYear &&
       tDate.getMonth() === currentMonth;
+    const isToday =
+      isThisMonth &&
+      tDate.getDate() === currentDay;
 
     if (isIncome) {
       totalIncome += amount;
       if (isThisMonth) {
         monthlyIncome += amount;
+        monthlyTransactionCount++;
+      }
+      if (isToday) {
+        todayIncome += amount;
       }
     } else {
       totalExpense += amount;
       if (isThisMonth) {
         monthlyExpense += amount;
+        monthlyTransactionCount++;
+      }
+      if (isToday) {
+        todayExpense += amount;
       }
     }
   }
@@ -132,6 +152,7 @@ export function calculateSummaryStats(transactions: Transaction[]): SummaryStats
   const netSavings = monthlyIncome - monthlyExpense;
   const savingsRate =
     monthlyIncome > 0 ? Math.max(0, Math.round((netSavings / monthlyIncome) * 100)) : 0;
+  const dailyAverageExpense = currentDay > 0 ? Math.round(monthlyExpense / currentDay) : 0;
 
   return {
     totalBalance,
@@ -140,6 +161,10 @@ export function calculateSummaryStats(transactions: Transaction[]): SummaryStats
     netSavings,
     savingsRate,
     transactionCount: transactions.length,
+    todayIncome,
+    todayExpense,
+    dailyAverageExpense,
+    monthlyTransactionCount,
   };
 }
 
@@ -314,5 +339,11 @@ export function calculateDailyComparison(
     }
   }
 
-  return days.map(({ _key, ...rest }) => rest);
+  return days.map((d) => ({
+    label: d.label,
+    fullDate: d.fullDate,
+    income: d.income,
+    expense: d.expense,
+    net: d.net,
+  }));
 }

@@ -7,7 +7,6 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   PiggyBank,
-  TrendingUp,
 } from 'lucide-react';
 
 interface SummaryCardsProps {
@@ -15,6 +14,10 @@ interface SummaryCardsProps {
 }
 
 export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
+  const todayIncome = stats.todayIncome || 0;
+  const todayExpense = stats.todayExpense || 0;
+  const dailyAverageExpense = stats.dailyAverageExpense || 0;
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
       {/* 1. Total Saldo Card */}
@@ -32,7 +35,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
             {formatCurrency(stats.totalBalance)}
           </div>
           <p className="text-[10px] sm:text-xs text-gray-500 mt-1 flex items-center gap-1 truncate">
-            <span className="font-medium text-blue-600">Akumulasi Bersih</span>
+            <span className="font-medium text-blue-600">Akumulasi Seluruh Kas</span>
           </p>
         </div>
       </Card>
@@ -41,7 +44,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
       <Card padding="none" className="relative overflow-hidden bg-gradient-to-br from-white to-emerald-50/50 border-emerald-100 p-3.5 sm:p-5 flex flex-col justify-between">
         <div className="flex items-center justify-between">
           <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-500">
-            Pemasukan
+            Pemasukan Bulan Ini
           </span>
           <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center shrink-0">
             <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -51,9 +54,12 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
           <div className="text-base sm:text-2xl lg:text-3xl font-extrabold text-emerald-600 tracking-tight truncate" title={formatCurrency(stats.monthlyIncome)}>
             {formatCurrency(stats.monthlyIncome)}
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-500 mt-1 flex items-center gap-1 truncate">
-            <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600 shrink-0" />
-            <span>Kas Masuk Bulan Ini</span>
+          <p
+            className="text-[10px] sm:text-xs text-gray-500 mt-1 flex items-center gap-1 truncate"
+            title={`Pemasukan hari ini: ${formatCurrency(todayIncome)}`}
+          >
+            <span className="font-medium text-emerald-600">Hari ini:</span>
+            <span>{todayIncome > 0 ? `+${formatCurrency(todayIncome)}` : 'Rp 0'}</span>
           </p>
         </div>
       </Card>
@@ -62,7 +68,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
       <Card padding="none" className="relative overflow-hidden bg-gradient-to-br from-white to-red-50/50 border-red-100 p-3.5 sm:p-5 flex flex-col justify-between">
         <div className="flex items-center justify-between">
           <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-gray-500">
-            Pengeluaran
+            Pengeluaran Bulan Ini
           </span>
           <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-red-600/10 text-red-600 flex items-center justify-center shrink-0">
             <ArrowDownLeft className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -72,8 +78,12 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
           <div className="text-base sm:text-2xl lg:text-3xl font-extrabold text-red-600 tracking-tight truncate" title={formatCurrency(stats.monthlyExpense)}>
             {formatCurrency(stats.monthlyExpense)}
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-500 mt-1 truncate">
-            Belanja & tagihan bulan ini
+          <p
+            className="text-[10px] sm:text-xs text-gray-500 mt-1 flex items-center gap-1 truncate"
+            title={`Pengeluaran hari ini: ${formatCurrency(todayExpense)} (Rata-rata: ${formatCurrency(dailyAverageExpense)}/hari)`}
+          >
+            <span className="font-medium text-red-600">Hari ini:</span>
+            <span>{formatCurrency(todayExpense)}</span>
           </p>
         </div>
       </Card>
@@ -99,7 +109,7 @@ export const SummaryCards: React.FC<SummaryCardsProps> = ({ stats }) => {
           </div>
           <div className="flex items-center justify-between mt-1">
             <p className="text-[10px] sm:text-xs text-gray-500 truncate">
-              Rasio:
+              Rasio Tabungan:
             </p>
             <span
               className={`text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded-full ${
